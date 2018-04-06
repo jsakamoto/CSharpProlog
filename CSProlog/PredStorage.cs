@@ -848,6 +848,7 @@ namespace Prolog
           IO.WriteLine ("\r\n  (*) contains the description of a feature rather than a predicate.");
           IO.WriteLine ("\r\n  Usage: help <predicate>[/<arity>] or help( <predicate>[/<arity>]).");
           IO.WriteLine ("\r\n  File CsPrologHelp.txt contains the help texts and a description of how to re-create help.");
+          IO.WriteLine("\r\n  Facts must be read from a file before they can be queried. try  help(consult). to see how to read in from a file.");
 
           return true;
         }
