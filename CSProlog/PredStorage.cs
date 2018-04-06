@@ -832,8 +832,14 @@ namespace Prolog
         suggestion = null;
         const string HELPRES = "CsProlog.CsPrologHelp";
 
-        Assembly asm = Assembly.Load(new AssemblyName(GetType().AssemblyQualifiedName));
+        Assembly asm = Assembly.Load(new AssemblyName("CSProlog"));
+
+        //TODO: I've hardcoded the assembly name is CSProlog in Assembly.Load rather than using the AssemblyQualifiedName (was getting an error - not sure why and don't want to fight with it)
+        //Assembly asm = Assembly.Load(new AssemblyName(GetType().AssemblyQualifiedName));
+
+        //TODO: This was commented out before I got here... not sure what it was meant to do if anything. Eventually review.
         //string [] res = asm.GetManifestResourceNames (); // pick the right functor from res and put in in HELPRES
+
         ResourceManager rm = new ResourceManager (HELPRES, asm);
 
         if (functor == null)
