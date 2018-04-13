@@ -261,8 +261,8 @@ namespace Prolog
         PrologParser parser = Globals.CurrentParser = new PrologParser (engine);
         allDiscontiguous = false;
 
-        try
-        {
+       try
+       {
           prevIndex = null;
           definedInCurrFile.Clear ();
           isDiscontiguous.Clear ();
@@ -276,7 +276,9 @@ namespace Prolog
         }
         finally
         {
-          Globals.CurrentParser = consultParserStack.Pop (); ;
+        engine.showSingletonWarnings = true; // set it back to the default value of true
+
+        Globals.CurrentParser = consultParserStack.Pop (); ;
           //Globals.ConsultModuleName = null; // Currently not used
         }
 
@@ -355,7 +357,15 @@ namespace Prolog
            else
               IO.Error (":- stacktrace: illegal argument '{0}'; use 'on' or 'off' instead", argument);
             break;
-          case "initialization":
+          case "style_check_singleton_warning":
+            if (argument == "on")
+                engine.showSingletonWarnings = true;
+            else if (argument == "off")
+                engine.showSingletonWarnings = false;
+            else
+                IO.Error(":- style_check_singleton_warning: illegal argument '{0}'; use 'on' or 'off' instead. It is 'on' by default.", argument);
+            break;
+                    case "initialization":
             IO.Warning ("':- initialization' directive not implemented -- ignored");
             break;
           default:

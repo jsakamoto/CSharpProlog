@@ -510,6 +510,7 @@ namespace Prolog
     bool findFirstClause; // find the first clause of predicate that matches the current goal goal (-last head)
     bool csharpStrings = ConfigSettings.CSharpStrings;
     bool userSetShowStackTrace = ConfigSettings.OnErrorShowStackTrace; // default value
+    bool showSingletonWarnings = true; // want to be able to turn off singleton warnings at the file level (default to true and will need to add to reset code to make sure it isn't persisting across files)
 
     #region unique number generators
     static int unifyCount; // total number of unifications - for tabling ('cost calculation') only
@@ -2025,7 +2026,7 @@ namespace Prolog
     }
 
     public void ReportSingletons (ClauseNode c, int lineNo, ref bool firstReport)
-    {
+    {  
       solution.ReportSingletons (c, lineNo, ref firstReport);
     }
     #endregion Named variables
