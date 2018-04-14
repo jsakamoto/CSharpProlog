@@ -1811,21 +1811,6 @@ namespace Prolog
           {
             //TODO: enable persistence
             //throw new NotImplementedException();
-            persistentSettings = new ApplicationStorage();
-              List<string> history;
-
-              try
-              {
-                  history = persistentSettings.Get<List<string>>("CommandHistory", null);
-              }
-              catch
-              {
-                  history = null;
-              }
-          
-              if (history == null) return;
-          
-              foreach (string cmd in history) Add(cmd);
           }
 #else
           if (enablePersistence)
