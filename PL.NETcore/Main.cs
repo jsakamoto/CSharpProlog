@@ -14,6 +14,7 @@
 
 using System;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Prolog
 {
@@ -79,14 +80,18 @@ namespace Prolog
       Console.ForegroundColor = ConsoleColor.DarkBlue;
       Console.BackgroundColor = ConsoleColor.White;
       Console.Clear (); // applies the background color to the *entire* window background
-      try{Console.WindowWidth = 140;}catch{  }//linux doesn't support this
-      try{Console.WindowHeight = 60;}catch{  }//linux doesn't support this
-      try{Console.BufferWidth = 140;}catch{  }//linux doesn't support this
-      try{Console.BufferHeight = 3000;}catch{  }//linux doesn't support this
-      try{Console.WindowTop = 0;}catch{  }//linux doesn't support this
-      try{Console.WindowLeft = 0;}catch{  }//linux doesn't support this
       
-      // The following line prevents ^C from exiting the application
+      if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+      {
+        try{Console.WindowWidth = 140;}catch{  }
+        try{Console.WindowHeight = 60;}catch{  }
+        try{Console.BufferWidth = 140;}catch{  }  
+        try{Console.BufferHeight = 3000;}catch{  }
+        try{Console.WindowTop = 0;}catch{  }
+        try{Console.WindowLeft = 0;}catch{  }
+      }
+      
+      // TODO: The following line is supposed to prevent ^C from exiting the application - it doesn't work for linux
       Console.CancelKeyPress += new ConsoleCancelEventHandler (e.Console_CancelKeyPress);
     }
 
