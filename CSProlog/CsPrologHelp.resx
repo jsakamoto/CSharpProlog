@@ -969,7 +969,11 @@
   consult( +F)
   consult( [+F0, +F1, ...])
   
-    Consult a file or a list of files
+    Consult a file or a list of files. 
+    Consulting is how you load facts and rules. [eg.  consult("myrules.pl")]
+    Reads the file located in the working directory named myrules.swi and adds it to the working set of knowledge.
+    Note: pl is a common file extension, but is not required to use this library. 
+    
   
 </value>
   </data>
