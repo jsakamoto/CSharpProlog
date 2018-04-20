@@ -261,8 +261,8 @@ namespace Prolog
         PrologParser parser = Globals.CurrentParser = new PrologParser (engine);
         allDiscontiguous = false;
 
-        try
-        {
+       try
+       {
           prevIndex = null;
           definedInCurrFile.Clear ();
           isDiscontiguous.Clear ();
@@ -276,7 +276,9 @@ namespace Prolog
         }
         finally
         {
-          Globals.CurrentParser = consultParserStack.Pop (); ;
+        engine.showSingletonWarnings = true; // set it back to the default value of true
+
+        Globals.CurrentParser = consultParserStack.Pop (); ;
           //Globals.ConsultModuleName = null; // Currently not used
         }
 
@@ -355,7 +357,15 @@ namespace Prolog
            else
               IO.Error (":- stacktrace: illegal argument '{0}'; use 'on' or 'off' instead", argument);
             break;
-          case "initialization":
+          case "style_check_singleton_warning":
+            if (argument == "on")
+                engine.showSingletonWarnings = true;
+            else if (argument == "off")
+                engine.showSingletonWarnings = false;
+            else
+                IO.Error(":- style_check_singleton_warning: illegal argument '{0}'; use 'on' or 'off' instead. It is 'on' by default.", argument);
+            break;
+                    case "initialization":
             IO.Warning ("':- initialization' directive not implemented -- ignored");
             break;
           default:
@@ -830,10 +840,25 @@ namespace Prolog
       public bool ShowHelp (string functor, int arity, out string suggestion)
       {
         suggestion = null;
-        const string HELPRES = "CsProlog.CsPrologHelp";
+        string HELPRES = "CsProlog.CsPrologHelp"; // default HELPRES
 
-        Assembly asm = Assembly.Load(new AssemblyName(GetType().AssemblyQualifiedName));
-        //string [] res = asm.GetManifestResourceNames (); // pick the right functor from res and put in in HELPRES
+        Assembly asm = Assembly.Load(new AssemblyName("CSProlog"));
+
+        //TODO: I've hardcoded the assembly name is CSProlog in Assembly.Load rather than using the AssemblyQualifiedName (was getting an error - not sure why and don't want to fight with it)
+        //Assembly asm = Assembly.Load(new AssemblyName(GetType().AssemblyQualifiedName));
+
+        string [] res = asm.GetManifestResourceNames (); // pick the right functor from res and put in in HELPRES
+        foreach (string s in res)
+        {
+            //IO.WriteLine("FunctorInGetManifestResourceNames: " + s); // uncomment to see the resources - maybe help identify which one it should be if having problmes
+            //Could be CSProlog.CSPrologHelp.resources  OR  CSProlog.Core.CSPrologHelp.resources --- the below loop should find the right one and user it
+            if (s.Contains("CsPrologHelp.resources"))
+            {
+              HELPRES = s.Replace(".resources", "");
+              break;
+            }
+        }
+
         ResourceManager rm = new ResourceManager (HELPRES, asm);
 
         if (functor == null)
@@ -841,8 +866,8 @@ namespace Prolog
           IO.WriteLine (rm.GetString ("help$"));
           IO.WriteLine ("\r\n  (*) contains the description of a feature rather than a predicate.");
           IO.WriteLine ("\r\n  Usage: help <predicate>[/<arity>] or help( <predicate>[/<arity>]).");
-          IO.WriteLine ("\r\n  File CsPrologHelp.txt contains the help texts and a description of how to re-create help.");
-
+          IO.WriteLine ("\r\n  File CsPrologHelp.txt contains the help texts and a description of how to re-create help."); //TODO: I can't seem to find this file. Eliminate the line or create the file???
+          
           return true;
         }
         else if (functor == "history")

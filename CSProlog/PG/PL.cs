@@ -399,7 +399,11 @@ namespace Prolog
             }
           }
           c = new ClauseNode (head, body);
-          engine.ReportSingletons (c, lineNo - 1, ref firstReport);
+
+          if (engine.showSingletonWarnings)
+          {
+            engine.ReportSingletons(c, lineNo - 1, ref firstReport);
+          }
           ps.AddClause (c);
         }
         else if (symbol.TerminalId == PromptSym)
