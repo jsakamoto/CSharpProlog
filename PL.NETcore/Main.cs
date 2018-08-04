@@ -32,7 +32,10 @@ namespace Prolog
         // ProcessArgs -- for batch processing. Can be left out if not used
         //if (e.ProcessArgs (args, false)) return;
 
-        SetPreferredConsoleProperties (e);
+        SetPreferredConsoleProperties (e, args);
+
+
+
         Console.Title = "C#Prolog command window";
         Console.WriteLine (PrologEngine.IntroText);
         Console.WriteLine ("\r\n--- Enter !! for command history, help for a list of all commands");
@@ -74,11 +77,27 @@ namespace Prolog
     }
 
 
-    #region Console I/O
-    static void SetPreferredConsoleProperties (PrologEngine e)
+    #region Console I/O    
+    static void SetPreferredConsoleProperties (PrologEngine e, string[] args)
     {
-      Console.ForegroundColor = ConsoleColor.DarkBlue;
-      Console.BackgroundColor = ConsoleColor.White;
+      foreach (string arg in args)
+      {
+        switch(arg)
+        {
+            case "--dark":
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+                break;
+            case "--light":
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.BackgroundColor = ConsoleColor.White;
+                break;
+            default:
+                break;
+                // do nothing - leave it as it is
+        }
+      }
+
       Console.Clear (); // applies the background color to the *entire* window background
       
       // TODO: The following line is supposed to prevent ^C from exiting the application - it doesn't work for linux
